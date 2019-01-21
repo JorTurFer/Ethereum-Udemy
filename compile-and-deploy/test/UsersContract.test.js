@@ -58,4 +58,27 @@ describe("The UsersContract",async() =>{
             }
         }
     });
+
+    it("shouldn't retrive a user",async()=>{
+        try{        
+            let user = await usersContract.methods.getUser(accounts[0])
+            .call();
+            assert.fail("not should be possible get user without joined");
+        }
+        catch(e){
+            if(e instanceof AssertionError){
+                assert.fail(e.message);
+            }
+        }            
+    });
+
+    it("should retrive more than 0 users",async()=>{
+        await usersContract.methods.join("Pedro","Lopez")
+            .send({from: accounts[1],gas: "500000"});
+        
+        let userCount = await usersContract.methods.totalUsers()
+            .call();
+        assert.notEqual(userCount,0)
+    });
 });
+
