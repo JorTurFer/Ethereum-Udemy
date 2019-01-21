@@ -28,4 +28,17 @@ describe("The UsersContract",async() =>{
         await usersContract.methods.join(name,surname)
             .send({from: accounts[0],gas: "500000"});
     });
+
+    it("should retrive a user",async()=>{
+        let name = "Jorge";
+        let surname = "Turrado";
+        await usersContract.methods.join(name,surname)
+            .send({from: accounts[0],gas: "500000"});
+
+        let user = await usersContract.methods.getUser(accounts[0])
+            .call();
+
+            assert.equal(name,user[0]);
+            assert.equal(surname,user[1]);
+    });
 });
